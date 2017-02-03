@@ -1,0 +1,32 @@
+{
+  "name": "newapp.js",
+  "version": "1.0.0",
+  "description": "MS bot using node js for searching shoes",
+  "main": "newapp.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tirumalesh12/NewSampleBot.git"
+  },
+  "author": "Tirumalesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tirumalesh12/NewSampleBot/issues"
+  },
+  "homepage": "https://github.com/Tirumalesh12/NewSampleBot#readme",
+  "dependencies": {
+    "botbuilder": "^3.6.0",
+    "https": "^1.0.0",
+    "restify": "^4.3.0"
+  },
+  "engines": {
+    "node": "6.9.1"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "bot"
+  ]
+}
