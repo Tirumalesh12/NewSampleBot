@@ -38,7 +38,7 @@ capitalize = function(str) {
 	return str;
 };
 
-var connector = new builder.ChatConnector({appId:"", appPassword:""});
+var connector = new builder.ChatConnector({appId:"4b428875-c538-40b9-aacc-9c0eac86f3f0", appPassword:"GpdWAHC789joQjb8Lpr5ew3"});
 var bot = new builder.UniversalBot(connector);
 var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/c592677c-d9ec-435d-bada-77008d9fc147?subscription-key=412111898d6f49a0b22467676f123ecb&verbose=true&q=');
 var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
@@ -88,6 +88,6 @@ bot.dialog('/None', function (session, args) {
 var server = restify.createServer();
 server.post('/api/messages', connector.listen());
 server.on('error', function() { console.log("error"); });
-server.listen(process.env.port || 6000, function () {
+server.listen(process.env.PORT || 6000, function () {
     console.log('%s listening to %s', server.name, server.url); 
 });
