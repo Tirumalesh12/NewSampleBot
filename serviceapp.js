@@ -62,6 +62,12 @@ dialog.matches('None', function (session, args) {
     session.endDialog();	
 });
 
+dialog.matches('Where orderID', function (session, args, results) {
+	session.send("Order ID will be there in the order confirmation message that was sent to you while ordering.");
+	session.send("Or, you can go to our website Homepage --> My orders. Order ID is present on top of the respective ordered product. ")
+    session.endDialog();
+})
+
 // Setup Restify Server
 var server = restify.createServer();
 server.post('/api/messages', connector.listen());
