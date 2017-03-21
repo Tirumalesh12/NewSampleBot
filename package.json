@@ -1,5 +1,5 @@
 {
-  "name": "newapp.js",
+  "name": "serviceapp.js",
   "version": "1.0.0",
   "description": "MS bot using node js for searching shoes",
   "main": "newapp.js",
