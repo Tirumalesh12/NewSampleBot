@@ -47,14 +47,33 @@ dialog.matches('Issue', function (session, args, results) {
 	if(session.userData.orderID == ""){
 		session.beginDialog('/Ask OrderID');
 	}else {
-		session.send("Your order will be arriving on Monday");
+		if(session.userData.arrive != ""){
+			session.send("Your order will be arriving on Monday");
+		}
+		if (session.userData.statuss != ""){
+			session.send("The status of your order is so and so");
+		}
 	}
 })
 
-bot.dialog('/Ask OrderID', function (session, args, results){
-	session.send("Please tell your order ID");
-	session.endDialog();
-})
+bot.dialog('/Ask OrderID', [
+function (session, args, results){
+	builder.Prompts.text(session, "Please provide your 10 digit order ID?");
+},
+function (session, args, results){
+	if(results.response){
+		var orderID = results.response;
+		if(orderID.length != 10){
+			session.send("order ID you provided is not having 10 digits");
+			session.beginDialog('/Ask OrderID');
+		}else {
+			session.userData.orderID = orderID;
+		}
+	}else {
+		session.endDialog();
+	}
+}
+])
 
 dialog.matches('None', function (session, args) {
 	console.log ('in none intent');	
