@@ -38,6 +38,7 @@ dialog.matches('Issue', function (session, args, results) {
 	var statuss = builder.EntityRecognizer.findEntity(args.entities, 'Order::status');
 	var arrive = builder.EntityRecognizer.findEntity(args.entities, 'Order::arrive');
 	var orderID = builder.EntityRecognizer.findEntity(args.entities, 'Order::OrderID');
+	var cancel = builder.EntityRecognizer.findEntity(args.entities, 'cancel');
 	session.userData = {
 		order   : order   ? order.entity   : "",
 	    statuss : statuss ? order.entity   : "",
@@ -47,11 +48,18 @@ dialog.matches('Issue', function (session, args, results) {
 	if(session.userData.orderID == ""){
 		session.beginDialog('/Ask OrderID');
 	}else {
-		if(session.userData.arrive != ""){
-			session.send("Your order will be arriving on Monday");
-		}
-		if (session.userData.statuss != ""){
-			session.send("The status of your order is so and so");
+		if(session.userData.orderID.length != 10){
+			session.send("order ID you provided is not having 10 digits");
+			session.beginDialog('/Ask OrderID');
+		}else if(session.userData.cancel == ""){
+			if(session.userData.arrive != ""){
+				session.send("Your order will be arriving on Monday");
+			}
+			if (session.userData.statuss != ""){
+				session.send("The status of your order is so and so");
+			}
+		}else {
+			session.send("A request is been raised for the cancellation of your order. We will notify you any furthur.");
 		}
 	}
 })
@@ -80,12 +88,6 @@ dialog.matches('None', function (session, args) {
 	session.send("I am sorry! I am a bot, perhaps not programmed to understand this command");
     session.endDialog();	
 });
-
-dialog.matches('Where orderID', function (session, args, results) {
-	session.send("Order ID will be there in the order confirmation message that was sent to you while ordering.");
-	session.send("Or, you can go to our website Homepage --> My orders. Order ID is present on top of the respective ordered product. ")
-    session.endDialog();
-})
 
 // Setup Restify Server
 var server = restify.createServer();
