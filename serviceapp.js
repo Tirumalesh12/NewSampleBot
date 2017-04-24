@@ -25,6 +25,7 @@ var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog('/', dialog);
 
 dialog.matches('Welcome', function (session, args) {
+	session.sendTyping();
 	console.log ('in greeting intent');	
 	var username = session.message;
 	session.send("Hello " +username.address.user.name+ ". " +WishMe());
@@ -33,6 +34,7 @@ dialog.matches('Welcome', function (session, args) {
 });
 
 dialog.matches('Issue', function (session, args, results) {
+	session.sendTyping();
 	console.log("in issue intent");
 	var order = builder.EntityRecognizer.findEntity(args.entities, 'Order');
 	var statuss = builder.EntityRecognizer.findEntity(args.entities, 'Order::status');
@@ -64,22 +66,29 @@ dialog.matches('Issue', function (session, args, results) {
 	}
 })
 
-bot.dialog('/Ask OrderID', [
-function (session, args, results){
-	builder.Prompts.text(session, "Please provide your 10 digit order ID?");
+bot.dialog('/Ask OrderID', function (session, args, results){
+	session.send("Please provide your 10 digit order ID?");
+	session.endDialog();
+})
+
+dialog.matches('Change address', [
+function (session, args) {
+	session.sendTyping();
+	builder.Prompts.choice(session, "It's super easy, Click on the button and let me guide you" , ['change address','Cancel']);
 },
-function (session, args, results){
-	if(results.response){
-		var orderID = results.response;
-		if(orderID.length != 10){
-			session.send("order ID you provided is not having 10 digits");
-			session.beginDialog('/Ask OrderID');
+function(session, results){
+	if (results.response.entity != 'Cancel' ) {
+		     builder.Prompts.number(session, "Firstly provide the PIN code to check for availability of delivery");
 		}else {
-			session.userData.orderID = orderID;
+			session.send("OK, We will deliver your order to the previously saved address");
+			session.endDialog();
 		}
-	}else {
-		session.endDialog();
-	}
+},
+function(session, results){
+		if (results.response){
+		session.send("Delivery is available to this PIN");
+		builder.Prompts.text(session, "Please provide the new address separated by comma");
+		}
 }
 ])
 
