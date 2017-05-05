@@ -89,6 +89,12 @@ function(session, results){
 		session.send("Delivery is available to this PIN");
 		builder.Prompts.text(session, "Please provide the new address separated by comma");
 		}
+},
+function(session, results){
+	if(results.response)
+	session.userData.address = results.response;
+	session.send("We have saved your address and delivers your order to this address");
+	session.endDialog();
 }
 ])
 
