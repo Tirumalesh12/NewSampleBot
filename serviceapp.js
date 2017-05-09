@@ -1,6 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var http = require('http');
+var sess = require('client-sessions');
 
 WishMe = function(){
 	var currentTime = new Date();
@@ -30,10 +31,27 @@ dialog.matches('Welcome', function (session, args) {
 	var username = session.message;
 	session.send("Hello " +username.address.user.name+ ". " +WishMe());
 	session.send("How can I help you?");
+	session.userData = {
+			order:  "",
+			statuss:"",
+			arrive: "",
+			orderID: "",
+			cancel:  ""
+		}
 	session.endDialog();
 });
 
 dialog.matches('Issue', function (session, args, results) {
+	if(session.userData.order !== undefined){session.dialogData = session.userData;}
+	else {
+		session.dialogData = {
+			order:  "",
+			statuss:"",
+			arrive: "",
+			orderID: "",
+			cancel:  ""
+		}
+	}
 	session.sendTyping();
 	console.log("in issue intent");
 	var order = builder.EntityRecognizer.findEntity(args.entities, 'Order');
@@ -42,10 +60,11 @@ dialog.matches('Issue', function (session, args, results) {
 	var orderID = builder.EntityRecognizer.findEntity(args.entities, 'Order::OrderID');
 	var cancel = builder.EntityRecognizer.findEntity(args.entities, 'cancel');
 	session.userData = {
-		order   : order   ? order.entity   : "",
-	    statuss : statuss ? order.entity   : "",
-        arrive  : arrive  ? arrive.entity  : "",
-        orderID : orderID ? orderID.entity : ""
+		order   : order   ? order.entity   : session.dialogData.order,
+	    statuss : statuss ? order.entity   : session.dialogData.statuss,
+        arrive  : arrive  ? arrive.entity  : session.dialogData.arrive,
+        orderID : orderID ? orderID.entity : session.dialogData.orderID,
+		cancel  : cancel  ? cancel.entity  : session.dialogData.cancel
 	}
 	if(session.userData.orderID == ""){
 		session.beginDialog('/Ask OrderID');

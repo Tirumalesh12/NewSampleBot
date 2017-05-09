@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Tirumalesh12/NewSampleBot#readme",
   "dependencies": {
     "botbuilder": "^3.6.0",
+    "client-sessions": "^0.8.0",
     "https": "^1.0.0",
     "restify": "^4.3.0"
   },
